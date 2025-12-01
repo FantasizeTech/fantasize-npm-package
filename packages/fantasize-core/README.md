@@ -1,8 +1,6 @@
 # @fantasizetech/fantasize-core
 
-ศูนย์กลางของ type + utils สำหรับ Fantasize ecosystem (Result, Option, Either, Paginated, Error classes, และ object/date/crypto/async helpers) ใช้ร่วมกันได้ทุกแพ็กเกจ. Node 20+.
-
-Central functional types & zero-dependency utilities for the Fantasize ecosystem.
+Central hub for functional types and shared utilities (Result, Option, Either, Paginated, error classes, and object/date/crypto/async helpers) powering the Fantasize ecosystem. Requires Node 20+.
 
 ## Install
 
@@ -124,9 +122,9 @@ relativeTime(tomorrow); // in 1 day
 - `Result` and `Option` keep flow explicit and composable.
 - Date helpers intentionally simple (no timezone heavy lifting).
 
-## Real-World Use Cases (หน้างานจริง)
+## Real-World Use Cases
 
-Below are practical scenarios showing integration patterns. (ตัวอย่างใช้งานจริง / แนวทาง integrate กับระบบใหญ่)
+Practical scenarios showing integration and composition patterns.
 
 ### 1. API Wrapper Returning `Result` + Mapping to Domain Errors
 
@@ -148,7 +146,7 @@ async function fetchUser(id: string): Promise<Result<UserDto, ApiError>> {
   }
 }
 
-// Map transport error -> domain layer error for service boundary
+// Map transport-level error to domain-layer error at the service boundary
 async function getUser(id: string): Promise<Result<UserDto, DomainError>> {
   const raw = await fetchUser(id);
   return mapResult(raw, (u) => u).ok // Ok path stays same
@@ -157,7 +155,7 @@ async function getUser(id: string): Promise<Result<UserDto, DomainError>> {
 }
 ```
 
-### 2. Form Validation Pipeline (`Either` / `Result`)
+### 2. Form Validation Pipeline (`Result`)
 
 ```ts
 import { Result, ok, err } from '@fantasizetech/fantasize-core';
@@ -262,7 +260,7 @@ function reserveStock(current: number, requested: number) {
 }
 ```
 
-> ใช้ pattern เหล่านี้เพื่อให้โค้ดอ่านง่าย, robust, และ ecosystem ต่อขยายได้สะดวก.
+> Use these patterns to keep code explicit, robust, and easy to extend across the ecosystem.
 
 ## License
 
