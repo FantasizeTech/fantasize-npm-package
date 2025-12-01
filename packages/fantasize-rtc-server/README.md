@@ -25,6 +25,75 @@ rtc.relay('demo-room', 'alice', {
 });
 ```
 
+## Frontend example (React + fetch)
+
+```tsx
+import React from 'react';
+
+function useRtcClient(baseUrl: string) {
+  const connect = (roomId: string, peerId: string, metadata?: Record<string, unknown>) =>
+    fetch(`${baseUrl}/rtc/connect`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roomId, peerId, metadata }),
+    }).then((r) => r.json());
+
+  const heartbeat = (roomId: string, peerId: string) =>
+    fetch(`${baseUrl}/rtc/heartbeat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roomId, peerId }),
+    }).then((r) => r.json());
+
+  const signal = (roomId: string, fromPeerId: string, signal: { type: string; payload: unknown }) =>
+    fetch(`${baseUrl}/rtc/signal`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roomId, fromPeerId, signal }),
+    }).then((r) => r.json());
+
+  return { connect, heartbeat, signal };
+}
+
+export function RtcDemo() {
+  const api = useRtcClient('http://localhost:3000');
+  const [roomId, setRoomId] = React.useState('demo-room');
+  const [peerId, setPeerId] = React.useState('alice');
+  const [log, setLog] = React.useState<string[]>([]);
+
+  const append = (msg: string) => setLog((prev) => [...prev, msg]);
+
+  const handleConnect = async () => {
+    const info = await api.connect(roomId, peerId, { role: 'caller' });
+    append(`Connected ${info.peerId} to ${info.roomId}`);
+  };
+
+  const handleSignal = async () => {
+    const res = await api.signal(roomId, peerId, { type: 'offer', payload: { sdp: '...' } });
+    append(`Sent offer from ${peerId}, listeners=${res.listenersNotified}`);
+  };
+
+  const handleHeartbeat = async () => {
+    const res = await api.heartbeat(roomId, peerId);
+    append(`Heartbeat at ${res.lastSeen}`);
+  };
+
+  return (
+    <div>
+      <h2>RTC Demo</h2>
+      <div>
+        <input value={roomId} onChange={(e) => setRoomId(e.target.value)} placeholder="roomId" />
+        <input value={peerId} onChange={(e) => setPeerId(e.target.value)} placeholder="peerId" />
+      </div>
+      <button onClick={handleConnect}>Connect</button>
+      <button onClick={handleSignal}>Send Offer</button>
+      <button onClick={handleHeartbeat}>Heartbeat</button>
+      <pre>{log.join('\n')}</pre>
+    </div>
+  );
+}
+```
+
 ## API surface
 
 - `createRtcServer(config?)` → `RtcServer`
@@ -37,24 +106,6 @@ rtc.relay('demo-room', 'alice', {
 - `rtc.getRoomSnapshot(roomId)` – inspect current peers and metadata for debugging or observability.
 
 Events emitted: `room:created`, `room:closed`, `peer:connected`, `peer:disconnected`, `peer:heartbeat`, `signal`.
-
-## Testing
-
-Run the Jest suite with strict 100% coverage thresholds enforced:
-
-```bash
-npx nx test @fantasizetech/fantasize-rtc-server --coverage
-```
-
-All branches, statements, and functions are covered to ensure the RTC workflow surface remains reliable as it evolves.
-
-## Build for npm
-
-Build the distributable (CJS + typings) ready to publish as `@fantasizetech/fantasize-rtc-server`:
-
-```bash
-npx nx build @fantasizetech/fantasize-rtc-server
-```
 
 ## Framework snippets
 
