@@ -1,7 +1,7 @@
 {
-  "name": "@fantasizetech/inventory-support",
+  "name": "@fantasizetech/fantasize-inventory-management",
   "version": "0.1.0",
-  "description": "Client-side inventory support toolkit with React context and optional Jotai/Zustand/Redux/MobX integrations.",
+  "description": "Client-side inventory management toolkit with React context and optional Jotai/Zustand/Redux/MobX integrations.",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",

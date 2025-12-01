@@ -1,4 +1,4 @@
-# @fantasizetech/inventory-support
+# @fantasizetech/fantasize-inventory-management
 
 Client-side inventory toolkit for React with optional integrations for Jotai, Zustand, Redux, and MobX. Requires Node 20+.
 
@@ -13,7 +13,7 @@ Client-side inventory toolkit for React with optional integrations for Jotai, Zu
 ## Install
 
 ```
-npm i @fantasizetech/inventory-support
+npm i @fantasizetech/fantasize-inventory-management
 ```
 
 Peer dependencies:
@@ -35,7 +35,7 @@ You have five options depending on your stack and preference.
 1. React Context (built-in, no extra installs)
 
 ```tsx
-import { InventoryProvider, useInventory } from '@fantasizetech/inventory-support';
+import { InventoryProvider, useInventory } from '@fantasizetech/fantasize-inventory-management';
 
 function App() {
   const { state, dispatch } = useInventory();
@@ -58,7 +58,7 @@ function App() {
 
 ```tsx
 import { atom, useAtom } from 'jotai';
-import type { InventoryState } from '@fantasizetech/inventory-support';
+import type { InventoryState } from '@fantasizetech/fantasize-inventory-management';
 
 const inventoryAtom = atom<InventoryState>({
   catalog: { products: [], units: [], vats: [], packages: [], warehouses: [] },
@@ -76,7 +76,7 @@ function JotaiInventoryView() {
 
 ```tsx
 import { create } from 'zustand';
-import type { InventoryState } from '@fantasizetech/inventory-support';
+import type { InventoryState } from '@fantasizetech/fantasize-inventory-management';
 
 type InvStore = InventoryState & {
   setCatalog: (c: InventoryState['catalog']) => void;
@@ -99,7 +99,7 @@ function ZustandInventoryView() {
 4. Redux (install `redux` and/or `@reduxjs/toolkit`)
 
 ```ts
-import type { InventoryState, InventoryAction } from '@fantasizetech/inventory-support';
+import type { InventoryState, InventoryAction } from '@fantasizetech/fantasize-inventory-management';
 
 const initial: InventoryState = {
   catalog: { products: [], units: [], vats: [], packages: [], warehouses: [] },
@@ -135,7 +135,7 @@ export function inventoryReducer(state = initial, action: InventoryAction): Inve
 
 ```ts
 import { makeAutoObservable } from 'mobx';
-import type { InventoryState } from '@fantasizetech/inventory-support';
+import type { InventoryState } from '@fantasizetech/fantasize-inventory-management';
 
 class InventoryStore implements InventoryState {
   catalog = { products: [], units: [], vats: [], packages: [], warehouses: [] };
@@ -159,7 +159,7 @@ export const inventoryStore = new InventoryStore();
 ```tsx
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { InventoryProvider, useInventory } from '@fantasizetech/inventory-support';
+import { InventoryProvider, useInventory } from '@fantasizetech/fantasize-inventory-management';
 
 function App() {
   const { state, dispatch, stockInUnits } = useInventory();
@@ -206,7 +206,7 @@ Small UI showing catalog + stock with a create form:
 ```tsx
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { InventoryProvider, useInventory } from '@fantasizetech/inventory-support';
+import { InventoryProvider, useInventory } from '@fantasizetech/fantasize-inventory-management';
 
 function InventoryDashboard() {
   const { state, dispatch, stockInUnits } = useInventory();
@@ -294,7 +294,7 @@ All core entities can be extended via generics while preserving the required rel
 Example: add `brand` to Product and `location` to Warehouse and get a strongly-typed Provider/Hook via `createInventoryContext`.
 
 ```tsx
-import { createInventoryContext } from '@fantasizetech/inventory-support';
+import { createInventoryContext } from '@fantasizetech/fantasize-inventory-management';
 
 type ProductExtra = { brand?: string };
 type WarehouseExtra = { location?: string };
