@@ -62,6 +62,11 @@ Node 20+ Nx workspace containing publishable packages and CI workflows.
 	- Build: `npx nx run @fantasizetech/fantasize-inventory-management:build`
 	- Docs: see `packages/fantasize-inventory-management/README.md`
 
+- `@fantasizetech/fantasize-core` — Functional types + errors + utility helpers (Result, Option, Either, Paginated, DomainError/ApiError, object/date/crypto/async)
+	- Path: `packages/fantasize-core`
+	- Build: `npx nx run @fantasizetech/fantasize-core:build`
+	- Docs: see `packages/fantasize-core/README.md`
+
 > Note on npm scope: CI is configured with npm scope `@fantasize-tech`. Current package.json names use `@fantasizetech`. Align scopes before publishing (rename package names or update CI scope).
 
 ## Dev Quickstart
@@ -89,6 +94,7 @@ GitHub Actions publish each package to npm when you push a matching tag:
 - RTC Client: tag `fantasize-rtc-client-v<version>`
 - RTC Server: tag `fantasize-rtc-server-v<version>`
 - Inventory: tag `fantasize-inventory-management-v<version>`
+- Core: tag `fantasize-core-v<version>`
 
 Example:
 ```sh
