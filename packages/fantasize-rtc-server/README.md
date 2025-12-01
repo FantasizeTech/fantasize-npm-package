@@ -25,6 +25,47 @@ rtc.relay('demo-room', 'alice', {
 });
 ```
 
+## Client + server example
+
+Use the server as an HTTP signaling endpoint and consume it with `@fantasizetech/fantasize-rtc-client`:
+
+```ts
+// server.ts
+import express from 'express';
+import { createRtcServer } from '@fantasizetech/fantasize-rtc-server';
+
+const app = express();
+app.use(express.json());
+const rtc = createRtcServer();
+
+app.post('/rtc/connect', (req, res) =>
+  res.json(rtc.connectPeer(req.body.roomId, req.body.peerId, req.body.metadata))
+);
+app.post('/rtc/heartbeat', (req, res) =>
+  res.json({ lastSeen: rtc.heartbeat(req.body.roomId, req.body.peerId) })
+);
+app.post('/rtc/signal', (req, res) =>
+  res.json(rtc.relay(req.body.roomId, req.body.fromPeerId, req.body.signal))
+);
+
+app.listen(3000, () => console.log('RTC server on http://localhost:3000'));
+```
+
+```ts
+// client.ts
+import { RtcClient } from '@fantasizetech/fantasize-rtc-client';
+
+const client = new RtcClient({ baseUrl: 'http://localhost:3000' });
+
+async function main() {
+  await client.connect('demo-room', 'alice');
+  await client.signal('demo-room', 'alice', { type: 'offer', payload: { sdp: '...' } });
+  await client.heartbeat('demo-room', 'alice');
+}
+
+main();
+```
+
 ## Frontend example (React + fetch)
 
 ```tsx

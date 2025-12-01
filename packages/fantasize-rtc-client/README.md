@@ -89,3 +89,44 @@ export function RtcWidget() {
 - `rtc.signal(roomId, fromPeerId, signal)` → `RelayResponse`
 
 Types are exported for convenience: `ConnectResponse`, `HeartbeatResponse`, `RelayResponse`, `RtcSignal`, `RtcSignalType`.
+
+## Pairing with @fantasizetech/fantasize-rtc-server
+
+Minimal end-to-end example with the server using Express and this client from another service/frontend:
+
+```ts
+// server.ts
+import express from 'express';
+import { createRtcServer } from '@fantasizetech/fantasize-rtc-server';
+
+const app = express();
+app.use(express.json());
+const rtc = createRtcServer();
+
+app.post('/rtc/connect', (req, res) =>
+  res.json(rtc.connectPeer(req.body.roomId, req.body.peerId, req.body.metadata))
+);
+app.post('/rtc/heartbeat', (req, res) =>
+  res.json({ lastSeen: rtc.heartbeat(req.body.roomId, req.body.peerId) })
+);
+app.post('/rtc/signal', (req, res) =>
+  res.json(rtc.relay(req.body.roomId, req.body.fromPeerId, req.body.signal))
+);
+
+app.listen(3000, () => console.log('RTC server on http://localhost:3000'));
+```
+
+```ts
+// client.ts (or React hook/component)
+import { RtcClient } from '@fantasizetech/fantasize-rtc-client';
+
+const client = new RtcClient({ baseUrl: 'http://localhost:3000' });
+
+async function demo() {
+  await client.connect('room-1', 'alice');
+  await client.signal('room-1', 'alice', { type: 'offer', payload: { sdp: '...' } });
+  await client.heartbeat('room-1', 'alice');
+}
+
+demo();
+```
