@@ -124,6 +124,146 @@ relativeTime(tomorrow); // in 1 day
 - `Result` and `Option` keep flow explicit and composable.
 - Date helpers intentionally simple (no timezone heavy lifting).
 
+## Real-World Use Cases (หน้างานจริง)
+
+Below are practical scenarios showing integration patterns. (ตัวอย่างใช้งานจริง / แนวทาง integrate กับระบบใหญ่)
+
+### 1. API Wrapper Returning `Result` + Mapping to Domain Errors
+
+```ts
+import { ok, err, Result, ApiError, DomainError, mapResult } from '@fantasizetech/fantasize-core';
+
+interface UserDto {
+  id: string;
+  name: string;
+}
+
+async function fetchUser(id: string): Promise<Result<UserDto, ApiError>> {
+  try {
+    const res = await fetch(`/api/users/${id}`);
+    if (!res.ok) return err(new ApiError(res.status, 'Fetch failed', 'USER_FETCH_FAILED'));
+    return ok(await res.json());
+  } catch (e) {
+    return err(new ApiError(0, 'Network error', 'NETWORK', e));
+  }
+}
+
+// Map transport error -> domain layer error for service boundary
+async function getUser(id: string): Promise<Result<UserDto, DomainError>> {
+  const raw = await fetchUser(id);
+  return mapResult(raw, (u) => u).ok // Ok path stays same
+    ? raw
+    : err(new DomainError('USER_UNAVAILABLE', raw.error.message));
+}
+```
+
+### 2. Form Validation Pipeline (`Either` / `Result`)
+
+```ts
+import { Result, ok, err } from '@fantasizetech/fantasize-core';
+
+interface Registration {
+  email: string;
+  password: string;
+}
+
+function validateEmail(v: string): Result<string, DomainError> {
+  return /.+@.+/.test(v) ? ok(v) : err(new DomainError('EMAIL_INVALID'));
+}
+function validatePassword(v: string): Result<string, DomainError> {
+  return v.length >= 8 ? ok(v) : err(new DomainError('PASSWORD_TOO_SHORT'));
+}
+
+function validate(reg: Registration): Result<Registration, DomainError[]> {
+  const errors: DomainError[] = [];
+  const emailR = validateEmail(reg.email);
+  if (!emailR.ok) errors.push(emailR.error);
+  const passR = validatePassword(reg.password);
+  if (!passR.ok) errors.push(passR.error);
+  return errors.length ? err(errors) : ok(reg);
+}
+```
+
+### 3. Cached Optional Value (`Option`) for Performance
+
+```ts
+import { Option, some, none, isSome, unwrapOr } from '@fantasizetech/fantasize-core';
+
+let cachedSettings: Option<{ theme: string }> = none;
+
+async function loadSettings() {
+  if (isSome(cachedSettings)) return cachedSettings.value; // fast path
+  const res = await fetch('/api/settings');
+  const json = await res.json();
+  cachedSettings = some(json);
+  return json;
+}
+
+const theme = unwrapOr(cachedSettings, { theme: 'light' }).theme;
+```
+
+### 4. Pagination of Large Search Results (`Paginated<T>`) Client-Side
+
+```ts
+import { paginate } from '@fantasizetech/fantasize-core';
+const all = await fetch('/api/products?limit=1000').then((r) => r.json());
+const page3 = paginate(all, 3, 50); // items, hasNext, etc.
+```
+
+### 5. Debounced Live Search (UI) + Throttled Scroll Events
+
+```ts
+import { debounce, throttle } from '@fantasizetech/fantasize-core';
+
+const search = debounce(async (q: string) => {
+  const r = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+  console.log('Results', await r.json());
+}, 300);
+
+window.addEventListener('keyup', (e) => {
+  if (e.target instanceof HTMLInputElement) search(e.target.value);
+});
+
+const reportScroll = throttle(() => {
+  console.log('Scroll position', window.scrollY);
+}, 1000);
+window.addEventListener('scroll', reportScroll);
+```
+
+### 6. ID Generation for Optimistic UI Items
+
+```ts
+import { nanoid, uuid } from '@fantasizetech/fantasize-core';
+
+// optimistic temp client id
+const tempId = nanoid();
+// server-side stable id (if needed)
+const stableId = uuid();
+```
+
+### 7. Relative Time + Date Range Building
+
+```ts
+import { startOfDay, endOfDay, addDays, relativeTime } from '@fantasizetech/fantasize-core';
+const todayStart = startOfDay(new Date());
+const todayEnd = endOfDay(new Date());
+const last7Start = addDays(todayStart, -6);
+console.log(relativeTime(addDays(new Date(), 2))); // in 2 days
+```
+
+### 8. DomainError in Business Rule Enforcement
+
+```ts
+import { DomainError } from '@fantasizetech/fantasize-core';
+
+function reserveStock(current: number, requested: number) {
+  if (requested > current) throw new DomainError('INSUFFICIENT_STOCK');
+  return current - requested;
+}
+```
+
+> ใช้ pattern เหล่านี้เพื่อให้โค้ดอ่านง่าย, robust, และ ecosystem ต่อขยายได้สะดวก.
+
 ## License
 
 MIT
