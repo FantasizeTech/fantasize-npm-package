@@ -1,0 +1,26 @@
+{
+  "name": "@org/fantasize-npm-package-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@org/fantasize-npm-package"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/fantasize-npm-package-e2e/jest.config.cts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@org/fantasize-npm-package:build",
+          "@org/fantasize-npm-package:serve"
+        ]
+      }
+    }
+  }
+}
