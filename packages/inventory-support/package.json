@@ -1,0 +1,50 @@
+{
+  "name": "@fantasizetech/inventory-support",
+  "version": "0.1.0",
+  "description": "Client-side inventory support toolkit with React context and optional Jotai/Zustand/Redux/MobX integrations.",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "powershell -NoProfile -Command \"if (Test-Path dist) { Remove-Item dist -Recurse -Force }\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "optionalDependencies": {
+    "jotai": "^2.6.0",
+    "zustand": "^4.5.0",
+    "redux": "^5.0.0",
+    "mobx": "^6.13.0"
+  },
+  "keywords": [
+    "inventory",
+    "react",
+    "jotai",
+    "zustand",
+    "redux",
+    "mobx",
+    "vat",
+    "warehouse",
+    "variants"
+  ],
+  "license": "MIT"
+}
