@@ -26,7 +26,7 @@ jobs:
           always-auth: true
 
       - name: Install dependencies
-        run: npm install --workspaces --include-workspace-root --no-audit --no-fund
+        run: npm ci
 
       - name: Verify npm auth
         run: npm whoami
