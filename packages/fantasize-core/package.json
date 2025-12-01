@@ -1,0 +1,41 @@
+{
+  "name": "@fantasizetech/fantasize-core",
+  "version": "0.1.0",
+  "description": "Core functional types and utilities (Result, Option, Either, Paginated, ApiError, DomainError, object/date/crypto/async helpers) for the Fantasize ecosystem.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "powershell -NoProfile -Command \"if (Test-Path dist) { Remove-Item dist -Recurse -Force }\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "result",
+    "option",
+    "either",
+    "core",
+    "utils",
+    "pagination",
+    "error",
+    "date",
+    "crypto"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}
