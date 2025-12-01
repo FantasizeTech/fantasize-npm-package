@@ -4,13 +4,10 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/fantasize-npm-package-e2e"
-    },
-    {
-      "path": "./apps/fantasize-npm-package"
-    },
-    {
       "path": "./packages/fantasize-rtc-server"
+    },
+    {
+      "path": "./packages/fantasize-rtc-client"
     }
   ]
 }

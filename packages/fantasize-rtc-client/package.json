@@ -1,0 +1,37 @@
+{
+  "name": "@fantasizetech/fantasize-rtc-client",
+  "version": "0.1.0",
+  "description": "Lightweight TypeScript client for fantasize-rtc-server (connect, heartbeat, signal over HTTP).",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "powershell -NoProfile -Command \"if (Test-Path dist) { Remove-Item dist -Recurse -Force }\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "@fantasizetech/fantasize-rtc-server": "^0.1.0"
+  },
+  "keywords": [
+    "rtc",
+    "webrtc",
+    "signaling",
+    "client"
+  ],
+  "license": "MIT"
+}

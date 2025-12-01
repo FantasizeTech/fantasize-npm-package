@@ -40,7 +40,6 @@
     "typescript-eslint": "^8.40.0"
   },
   "workspaces": [
-    "apps/*",
     "packages/*"
   ],
   "optionalDependencies": {
