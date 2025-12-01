@@ -1,4 +1,9 @@
-import { ConnectResponse, HeartbeatResponse, RelayResponse, RtcSignal } from './types';
+import {
+  ConnectResponse,
+  HeartbeatResponse,
+  RelayResponse,
+  RtcSignal,
+} from './types.js';
 
 export interface RtcClientOptions {
   baseUrl: string;
@@ -17,16 +22,32 @@ export class RtcClient {
     this.fetchImpl = options.fetchImpl ?? fetch;
   }
 
-  async connect(roomId: string, peerId: string, metadata?: Record<string, unknown>): Promise<ConnectResponse> {
-    return this.post<ConnectResponse>('/rtc/connect', { roomId, peerId, metadata });
+  async connect(
+    roomId: string,
+    peerId: string,
+    metadata?: Record<string, unknown>
+  ): Promise<ConnectResponse> {
+    return this.post<ConnectResponse>('/rtc/connect', {
+      roomId,
+      peerId,
+      metadata,
+    });
   }
 
   async heartbeat(roomId: string, peerId: string): Promise<HeartbeatResponse> {
     return this.post<HeartbeatResponse>('/rtc/heartbeat', { roomId, peerId });
   }
 
-  async signal(roomId: string, fromPeerId: string, signal: RtcSignal): Promise<RelayResponse> {
-    return this.post<RelayResponse>('/rtc/signal', { roomId, fromPeerId, signal });
+  async signal(
+    roomId: string,
+    fromPeerId: string,
+    signal: RtcSignal
+  ): Promise<RelayResponse> {
+    return this.post<RelayResponse>('/rtc/signal', {
+      roomId,
+      fromPeerId,
+      signal,
+    });
   }
 
   private async post<T>(path: string, body: unknown): Promise<T> {

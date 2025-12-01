@@ -4,7 +4,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "module": "esnext",
+    "module": "nodenext",
     "moduleResolution": "nodenext",
     "target": "es2022",
     "stripInternal": true
