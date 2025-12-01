@@ -1,0 +1,42 @@
+{
+  "name": "@fantasizetech/fantasize-logger",
+  "version": "0.1.0",
+  "description": "Lightweight universal structured logger (frontend + backend) with levels, metadata, color in dev, no-color in prod for Fantasize ecosystem.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.lib.json",
+    "clean": "powershell -NoProfile -Command \"if (Test-Path dist) { Remove-Item dist -Recurse -Force }\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "logger",
+    "logging",
+    "debug",
+    "structured",
+    "frontend",
+    "backend"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "optionalDependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.0.0",
+    "@elastic/elasticsearch": "^8.0.0"
+  },
+  "license": "MIT"
+}

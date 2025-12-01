@@ -1,0 +1,28 @@
+{
+  "name": "@fantasizetech/fantasize-logger",
+  "sourceRoot": "packages/fantasize-logger/src",
+  "projectType": "library",
+  "root": "packages/fantasize-logger",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "options": {
+        "main": "packages/fantasize-logger/src/index.ts",
+        "outputPath": "packages/fantasize-logger/dist",
+        "tsConfig": "packages/fantasize-logger/tsconfig.lib.json",
+        "assets": []
+      }
+    },
+    "typecheck": {
+      "executor": "@nx/js:tsc",
+      "options": {
+        "tsConfig": "packages/fantasize-logger/tsconfig.json",
+        "noEmit": true
+      }
+    },
+    "clean": {
+      "command": "npm run clean"
+    }
+  },
+  "tags": ["npm:public", "npm:logger", "npm:frontend", "npm:backend"]
+}
