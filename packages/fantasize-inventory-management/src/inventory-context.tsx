@@ -1,1 +1,1 @@
-export * from './inventory-provider.tsx';
+export * from './inventory-provider';

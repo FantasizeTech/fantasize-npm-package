@@ -1,5 +1,5 @@
 export * from './types';
-export * from './inventory-context.tsx';
+export * from './inventory-context';
 export * from './inventory-utils';
 export * from './stores/jotai';
 export * from './stores/zustand';

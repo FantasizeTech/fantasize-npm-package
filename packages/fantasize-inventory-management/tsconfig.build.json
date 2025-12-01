@@ -3,7 +3,8 @@
   "compilerOptions": {
     "module": "ES2020",
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "emitDeclarationOnly": false
   },
   "include": ["src"],
   "exclude": ["src/inventory-context.ts"]
