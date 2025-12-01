@@ -1,6 +1,6 @@
 {
   "name": "@fantasizetech/fantasize-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Core functional types and utilities (Result, Option, Either, Paginated, ApiError, DomainError, object/date/crypto/async helpers) for the Fantasize ecosystem.",
   "type": "module",
   "main": "dist/index.js",
