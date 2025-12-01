@@ -8,6 +8,9 @@
     },
     {
       "path": "./apps/fantasize-npm-package"
+    },
+    {
+      "path": "./packages/fantasize-rtc-server"
     }
   ]
 }

@@ -1,0 +1,110 @@
+{
+  "name": "@fantasizetech/fantasize-rtc-server",
+  "version": "0.1.0",
+  "private": false,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "defaultConfiguration": "production",
+        "options": {
+          "platform": "node",
+          "outputPath": "packages/fantasize-rtc-server/dist",
+          "format": [
+            "cjs"
+          ],
+          "bundle": false,
+          "main": "packages/fantasize-rtc-server/src/index.ts",
+          "tsConfig": "packages/fantasize-rtc-server/tsconfig.app.json",
+          "assets": [
+            "packages/fantasize-rtc-server/src/assets"
+          ],
+          "esbuildOptions": {
+            "sourcemap": true,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        },
+        "configurations": {
+          "development": {},
+          "production": {
+            "esbuildOptions": {
+              "sourcemap": false,
+              "outExtension": {
+                ".js": ".js"
+              }
+            }
+          }
+        }
+      },
+      "prune-lockfile": {
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true,
+        "executor": "@nx/js:prune-lockfile",
+        "outputs": [
+          "{workspaceRoot}/packages/fantasize-rtc-server/dist/package.json",
+          "{workspaceRoot}/packages/fantasize-rtc-server/dist/package-lock.json"
+        ],
+        "options": {
+          "buildTarget": "build"
+        }
+      },
+      "copy-workspace-modules": {
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true,
+        "outputs": [
+          "{workspaceRoot}/packages/fantasize-rtc-server/dist/workspace_modules"
+        ],
+        "executor": "@nx/js:copy-workspace-modules",
+        "options": {
+          "buildTarget": "build"
+        }
+      },
+      "prune": {
+        "dependsOn": [
+          "prune-lockfile",
+          "copy-workspace-modules"
+        ],
+        "executor": "nx:noop"
+      },
+      "serve": {
+        "continuous": true,
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "@fantasizetech/fantasize-rtc-server:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "@fantasizetech/fantasize-rtc-server:build:development"
+          },
+          "production": {
+            "buildTarget": "@fantasizetech/fantasize-rtc-server:build:production"
+          }
+        }
+      },
+      "test": {
+        "options": {
+          "passWithNoTests": false
+        }
+      }
+    }
+  },
+  "dependencies": {}
+}
